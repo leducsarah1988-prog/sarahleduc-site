@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sarah Leduc — Art, sensualité & quotidien</title>
+<meta name="description" content="Adult-only personal site / Site personnel réservé aux adultes.">
+<meta name="rating" content="adult">
+<link rel="canonical" href="https://sarahleduc.art/">
+<meta property="og:title" content="Sarah Leduc — Art, sensualité & quotidien">
+<meta property="og:url" content="https://sarahleduc.art/">
+<meta name="robots" content="noindex, nofollow"><!-- retirez cette ligne pour apparaître dans Google -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e0b0c; --bg2:#161112; --card:#1d1618; --ink:#f3ece8; --muted:#a8999a;
+    --accent:#c9566b; --accent2:#e0a96d; --line:rgba(255,255,255,.09); --glow:rgba(201,86,107,.22);
+    --serif:'Cormorant Garamond',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
+  }
+  [data-theme="light"]{
+    --bg:#faf5f1; --bg2:#f2e9e3; --card:#eadfd8; --ink:#241a1c; --muted:#6f5f61;
+    --accent:#b83e57; --accent2:#a8702f; --line:rgba(0,0,0,.12); --glow:rgba(184,62,87,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;line-height:1.7;transition:background .3s,color .3s}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  [hidden]{display:none!important}
+
+  /* Age gate */
+  #gate{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at 50% 30%,#2a1519,#0e0b0c 70%);color:#f3ece8;
+        display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem}
+  #gate.hidden{display:none}
+  #gate h1{font-family:var(--serif);font-weight:300;font-size:clamp(2.4rem,7vw,4rem);margin-bottom:.5rem}
+  #gate p{color:#a8999a;max-width:30rem;margin:0 auto 2rem}
+  .btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-block;padding:.85rem 2rem;border:1px solid var(--accent);color:var(--ink);background:transparent;
+       font:500 .8rem var(--sans);letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:.25s}
+  .btn:hover{background:var(--accent);color:#fff}
+  .btn.solid{background:var(--accent);color:#fff}
+  .btn.solid:hover{filter:brightness(.88)}
+  .btn.ghost{border-color:var(--line);color:var(--muted)}
+  #gate .btn{color:#f3ece8}
+
+  /* Header */
+  header{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
+         padding:.9rem 5vw;background:linear-gradient(var(--bg) 60%,transparent)}
+  .logo{font-family:var(--serif);font-size:1.6rem;letter-spacing:.05em}
+  nav{display:flex;gap:1.6rem;align-items:center}
+  nav a{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);transition:.2s}
+  nav a:hover{color:var(--ink)}
+  .tools{display:flex;gap:.5rem}
+  .tools button{background:transparent;border:1px solid var(--line);color:var(--ink);width:2.2rem;height:2.2rem;border-radius:50%;
+                cursor:pointer;font:500 .7rem var(--sans);transition:.2s}
+  .tools button:hover{border-color:var(--accent)}
+  @media(max-width:900px){nav{display:none}header{justify-content:space-between}}
+  #burger{display:none}
+  @media(max-width:900px){#burger{display:block}}
+  #mnav{position:fixed;inset:0;z-index:45;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center;gap:1.6rem}
+  #mnav.open{display:flex}
+  #mnav a{font-family:var(--serif);font-size:2rem}
+
+  /* Sections */
+  section{padding:7rem 5vw 4rem;max-width:1200px;margin:auto}
+  h2{font-family:var(--serif);font-weight:300;font-size:clamp(2rem,5vw,3.2rem);margin-bottom:.4rem}
+  .sub{color:var(--muted);margin-bottom:2.5rem;max-width:40rem}
+  .eyebrow{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--accent2);margin-bottom:1rem;display:block}
+  #accueil{min-height:100vh;display:flex;flex-direction:column;justify-content:center;max-width:none;
+           background:radial-gradient(ellipse at 70% 40%,var(--glow),transparent 55%),var(--bg)}
+  #accueil .inner{max-width:1200px;margin:auto;width:100%}
+  #accueil h1{font-family:var(--serif);font-weight:300;font-size:clamp(3rem,10vw,7rem);line-height:1;margin-bottom:1.2rem}
+  #accueil h1 em{color:var(--accent);font-style:italic}
+  #accueil p{max-width:34rem;color:var(--muted);margin-bottom:2rem;font-size:1.05rem}
+
+  /* Grids & tiles */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.2rem}
+  .tile{position:relative;aspect-ratio:3/4;overflow:hidden;background:var(--card);cursor:pointer;border:1px solid var(--line)}
+  .tile img,.tile .ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s,filter .4s}
+  .tile:hover img,.tile:hover .ph{transform:scale(1.05)}
+  .ph{display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-style:italic;color:rgba(255,255,255,.4);font-size:1.1rem}
+  .cap{position:absolute;left:0;right:0;bottom:0;padding:2.5rem 1rem 1rem;background:linear-gradient(transparent,rgba(0,0,0,.82));
+       font-family:var(--serif);font-size:1.15rem;color:#f3ece8}
+  .cap small{display:block;font:300 .72rem var(--sans);color:#c8b9ba;letter-spacing:.1em}
+  .mature img,.mature .ph{filter:blur(22px) saturate(.8)}
+  .mature.revealed img,.mature.revealed .ph{filter:none}
+  .lock{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;
+        font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:#fff;z-index:2;transition:opacity .3s}
+  .lock b{font-size:1.6rem}
+  .mature.revealed .lock{opacity:0;pointer-events:none}
+
+  /* Filtres & séries */
+  .chips{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.8rem}
+  .chip{padding:.4rem 1.1rem;border:1px solid var(--line);border-radius:99px;font-size:.78rem;letter-spacing:.08em;cursor:pointer;color:var(--muted);background:transparent;font-family:var(--sans)}
+  .chip.on,.chip:hover{border-color:var(--accent);color:var(--ink)}
+  .chip.on{background:var(--accent);color:#fff}
+  .serie-card{aspect-ratio:16/10}
+  #seriePage{position:fixed;inset:0;z-index:70;background:var(--bg);overflow:auto;padding:5rem 5vw 4rem}
+  #seriePage .inner{max-width:1200px;margin:auto}
+  .back{cursor:pointer;color:var(--accent2);font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:1.5rem;display:inline-block;background:none;border:0;font-family:var(--sans)}
+
+  /* Boutique */
+  .shop{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.4rem}
+  .prod{border:1px solid var(--line);background:var(--bg2)}
+  .prod .pic{aspect-ratio:1/1;position:relative}
+  .prod .pic .ph,.prod .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .prod .body{padding:1.1rem 1.2rem 1.4rem}
+  .prod h3{font-family:var(--serif);font-weight:500;font-size:1.35rem}
+  .prod p{color:var(--muted);font-size:.9rem;margin:.2rem 0 .9rem}
+  .prod .row{display:flex;justify-content:space-between;align-items:center}
+  .price{font-family:var(--serif);font-size:1.4rem;color:var(--accent2)}
+  .sold{opacity:.6}
+  .note{color:var(--muted);font-size:.8rem;margin-top:1.2rem}
+
+  /* Journal */
+  .journal{display:grid;gap:1px;background:var(--line)}
+  .entry{background:var(--bg);padding:1.8rem 0;display:grid;grid-template-columns:140px 1fr;gap:2rem}
+  .entry time{font-family:var(--serif);font-size:1.1rem;color:var(--accent2)}
+  .entry h3{font-family:var(--serif);font-weight:500;font-size:1.5rem;margin-bottom:.3rem}
+  .entry p{color:var(--muted)}
+  @media(max-width:600px){.entry{grid-template-columns:1fr;gap:.3rem}}
+
+  .two{display:grid;grid-template-columns:1fr 1.3fr;gap:3rem;align-items:center}
+  .portrait{aspect-ratio:4/5;background:var(--card);border:1px solid var(--line);position:relative}
+  .portrait img{width:100%;height:100%;object-fit:cover}
+  @media(max-width:760px){.two{grid-template-columns:1fr}}
+  form{display:grid;gap:1rem;max-width:34rem}
+  input,textarea{width:100%;background:var(--bg2);border:1px solid var(--line);color:var(--ink);padding:.9rem 1rem;font:300 1rem var(--sans)}
+  input:focus,textarea:focus{outline:none;border-color:var(--accent)}
+  .links{display:flex;gap:1.5rem;flex-wrap:wrap;margin-top:1.8rem}
+  .links a{border-bottom:1px solid var(--accent);padding-bottom:2px;font-size:.85rem;letter-spacing:.1em}
+  footer{text-align:center;padding:3rem 1rem;color:var(--muted);font-size:.78rem;border-top:1px solid var(--line)}
+
+  /* Lightbox */
+  #lb{position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:90;display:none;align-items:center;justify-content:center;padding:2rem;cursor:zoom-out;color:#f3ece8}
+  #lb.open{display:flex}
+  #lb .box{max-width:90vw;max-height:88vh;text-align:center}
+  #lb img{max-height:75vh;margin:auto}
+  #lb .big{width:min(80vw,420px);aspect-ratio:3/4;margin:auto;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-style:italic;color:rgba(255,255,255,.4)}
+  #lb p{margin-top:1rem;font-family:var(--serif);font-size:1.3rem}
+</style>
+</head>
+<body>
+
+<div id="gate" role="dialog" aria-modal="true">
+  <div>
+    <h1 data-i="gateTitle"></h1>
+    <p data-i="gateText"></p>
+    <div class="btns">
+      <button class="btn solid" id="enter" data-i="gateEnter"></button>
+      <a class="btn ghost" href="https://www.google.com" data-i="gateExit"></a>
+    </div>
+    <div class="btns" style="margin-top:1.5rem"><button class="chip" data-lang="fr" style="color:#ccc">Français</button><button class="chip" data-lang="en" style="color:#ccc">English</button></div>
+  </div>
+</div>
+
+<header>
+  <a class="logo" href="#accueil">Sarah Leduc</a>
+  <nav>
+    <a href="#oeuvres" data-i="nOeuvres"></a>
+    <a href="#sensuel" data-i="nSensuel"></a>
+    <a href="#boutique" data-i="nBoutique"></a>
+    <a href="#quotidien" data-i="nQuotidien"></a>
+    <a href="#apropos" data-i="nApropos"></a>
+    <a href="#contact" data-i="nContact"></a>
+  </nav>
+  <div class="tools">
+    <button id="langBtn" title="Langue / Language">EN</button>
+    <button id="themeBtn" title="Thème / Theme">☾</button>
+    <button id="burger" aria-label="Menu">☰</button>
+  </div>
+</header>
+<div id="mnav">
+  <a href="#oeuvres" data-i="nOeuvres"></a><a href="#sensuel" data-i="nSensuel"></a><a href="#boutique" data-i="nBoutique"></a>
+  <a href="#quotidien" data-i="nQuotidien"></a><a href="#apropos" data-i="nApropos"></a><a href="#contact" data-i="nContact"></a>
+</div>
+
+<main>
+  <section id="accueil">
+    <div class="inner">
+      <span class="eyebrow" data-i="heroEye"></span>
+      <h1 data-i-html="heroTitle"></h1>
+      <p data-i="heroText"></p>
+      <div class="btns">
+        <a class="btn solid" href="#oeuvres" data-i="heroBtn1"></a>
+        <a class="btn" href="#sensuel" data-i="heroBtn2"></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="oeuvres">
+    <span class="eyebrow" data-i="galEye"></span>
+    <h2 data-i="nOeuvres"></h2>
+    <p class="sub" data-i="galSub"></p>
+    <div class="chips" id="seriesChips"></div>
+    <div class="grid" id="gridSeries"></div>
+  </section>
+
+  <section id="sensuel">
+    <span class="eyebrow">18+</span>
+    <h2 data-i="nSensuel"></h2>
+    <p class="sub" data-i="senSub"></p>
+    <div class="grid" id="gridSens"></div>
+    <div class="links" id="platforms"></div>
+  </section>
+
+  <section id="boutique">
+    <span class="eyebrow" data-i="shopEye"></span>
+    <h2 data-i="nBoutique"></h2>
+    <p class="sub" data-i="shopSub"></p>
+    <div class="shop" id="shop"></div>
+    <p class="note" data-i="shopNote"></p>
+  </section>
+
+  <section id="quotidien">
+    <span class="eyebrow" data-i="jrnEye"></span>
+    <h2 data-i="nQuotidien"></h2>
+    <p class="sub" data-i="jrnSub"></p>
+    <div class="journal" id="journal"></div>
+  </section>
+
+  <section id="apropos">
+    <div class="two">
+      <div class="portrait" id="portrait"></div>
+      <div>
+        <span class="eyebrow" data-i="nApropos"></span>
+        <h2 data-i="aboutTitle"></h2>
+        <p class="sub" style="margin-bottom:1rem" data-i="aboutP1"></p>
+        <p style="color:var(--muted)" data-i="aboutP2"></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <span class="eyebrow" data-i="cEye"></span>
+    <h2 data-i="nContact"></h2>
+    <p class="sub" data-i="cSub"></p>
+    <form id="cf">
+      <input name="nom" data-iph="cName" required>
+      <input name="courriel" type="email" data-iph="cMail" required>
+      <textarea name="msg" rows="5" data-iph="cMsg" required></textarea>
+      <button class="btn solid" type="submit" data-i="cSend"></button>
+    </form>
+  </section>
+</main>
+
+<footer>© <span id="yr"></span> Sarah Leduc — <span data-i="foot"></span></footer>
+
+<!-- Page d'une série -->
+<div id="seriePage" hidden><div class="inner">
+  <button class="back" id="back"></button>
+  <span class="eyebrow" data-i="serieEye"></span>
+  <h2 id="sTitle"></h2>
+  <p class="sub" id="sDesc"></p>
+  <div class="grid" id="sGrid"></div>
+</div></div>
+
+<div id="lb"><div class="box" id="lbBox"></div></div>
+
+<script>
+/* =====================================================================
+   ✏️  À MODIFIER — tout votre contenu est ici (FR + EN)
+   "img" = chemin de l'image (ex. "images/a1.jpg"). Laissez "" = emplacement vide.
+   ===================================================================== */
+const CONFIG = {
+  email: "contact@sarahleduc.art",
+  plateformes: [
+    {nom:"OnlyFans / Fansly", url:"#"},
+    {nom:"Instagram",          url:"#"},
+    {nom:"Patreon",            url:"#"},
+  ],
+
+  /* Séries d'œuvres : chaque série a sa propre page */
+  series: [
+    {id:"toiles",  titre:{fr:"Toiles",  en:"Paintings"},   desc:{fr:"Peintures à l'huile et acrylique, formats moyens et grands.", en:"Oil and acrylic paintings, medium and large formats."}, cover:""},
+    {id:"traits",  titre:{fr:"Traits",  en:"Drawings"},    desc:{fr:"Dessins, fusain et encre : le geste avant tout.",             en:"Drawings, charcoal and ink: gesture first."},           cover:""},
+    {id:"lumiere", titre:{fr:"Lumière", en:"Light"},       desc:{fr:"Photographie : corps, ombres et clair-obscur.",                en:"Photography: bodies, shadows and chiaroscuro."},        cover:""},
+  ],
+  oeuvres: [
+    {serie:"toiles",  titre:{fr:"Sans titre I",     en:"Untitled I"},     detail:{fr:"Huile sur toile · 2026", en:"Oil on canvas · 2026"}, img:""},
+    {serie:"toiles",  titre:{fr:"Rouge",            en:"Red"},            detail:{fr:"Acrylique · 2025",       en:"Acrylic · 2025"},       img:""},
+    {serie:"traits",  titre:{fr:"Nuit d'encre",     en:"Ink Night"},      detail:{fr:"Dessin · 2026",          en:"Drawing · 2026"},       img:""},
+    {serie:"traits",  titre:{fr:"Silhouette",       en:"Silhouette"},     detail:{fr:"Fusain · 2025",          en:"Charcoal · 2025"},      img:""},
+    {serie:"lumiere", titre:{fr:"Courbes",          en:"Curves"},         detail:{fr:"Photographie · 2025",    en:"Photograph · 2025"},    img:""},
+    {serie:"lumiere", titre:{fr:"Étude de lumière", en:"Light Study"},    detail:{fr:"Photographie · 2024",    en:"Photograph · 2024"},    img:""},
+  ],
+
+  sensuel: [
+    {titre:{fr:"Boudoir — Série 1", en:"Boudoir — Series 1"}, detail:{fr:"12 photos", en:"12 photos"}, img:""},
+    {titre:{fr:"Clair-obscur",      en:"Chiaroscuro"},        detail:{fr:"8 photos",  en:"8 photos"},  img:""},
+    {titre:{fr:"Soie & lumière",    en:"Silk & Light"},       detail:{fr:"Vidéo",     en:"Video"},     img:""},
+    {titre:{fr:"Matin doux",        en:"Soft Morning"},       detail:{fr:"10 photos", en:"10 photos"}, img:""},
+  ],
+
+  /* Boutique : "lien" = lien de paiement Stripe / PayPal / Shopify, etc. */
+  boutique: [
+    {nom:{fr:"Impression « Rouge » 40×50", en:"“Red” print 40×50"},   desc:{fr:"Tirage d'art signé et numéroté.", en:"Signed, numbered fine-art print."}, prix:60,  lien:"#", dispo:true,  img:""},
+    {nom:{fr:"Toile originale « Sans titre I »", en:"Original “Untitled I”"}, desc:{fr:"Pièce unique, huile sur toile 60×80.", en:"One of a kind, oil on canvas 60×80."}, prix:850, lien:"#", dispo:true,  img:""},
+    {nom:{fr:"Carnet de croquis imprimé", en:"Printed sketchbook"},   desc:{fr:"48 pages, couverture rigide.",    en:"48 pages, hardcover."},             prix:35,  lien:"#", dispo:true,  img:""},
+    {nom:{fr:"Série boudoir (PDF)", en:"Boudoir series (PDF)"},        desc:{fr:"Téléchargement numérique, 18+.",  en:"Digital download, 18+."},           prix:15,  lien:"#", dispo:false, img:""},
+  ],
+
+  journal: [
+    {date:{fr:"12 nov. 2026", en:"Nov 12, 2026"}, titre:{fr:"Journée d'atelier", en:"Studio day"},
+     texte:{fr:"Longue session de peinture, café froid et playlist en boucle. Une nouvelle toile prend forme.", en:"Long painting session, cold coffee and a playlist on repeat. A new canvas is taking shape."}},
+    {date:{fr:"08 nov. 2026", en:"Nov 8, 2026"},  titre:{fr:"Coulisses d'un shooting", en:"Behind the shoot"},
+     texte:{fr:"Préparation, lumière, essais… un aperçu de ce qui se passe avant le déclic.", en:"Prep, lighting, test shots… a peek at what happens before the click."}},
+    {date:{fr:"01 nov. 2026", en:"Nov 1, 2026"},  titre:{fr:"Petites choses", en:"Little things"},
+     texte:{fr:"Marche en ville, marché du coin, quelques idées griffonnées dans le carnet.", en:"A walk downtown, the corner market, a few ideas scribbled in the notebook."}},
+  ],
+  portrait: "",   // ex. "images/portrait.jpg"
+  devise: "CAD",
+};
+
+/* ====================== Textes de l'interface ====================== */
+const T = {
+ fr:{gateTitle:"Réservé aux adultes",gateText:"Ce site contient du contenu artistique et sensuel destiné à un public majeur (18 ans et plus). En entrant, vous confirmez avoir l'âge légal dans votre région et consentir à voir ce type de contenu.",gateEnter:"J'ai 18 ans ou plus — Entrer",gateExit:"Quitter",
+  nOeuvres:"Œuvres",nSensuel:"Sensuel",nBoutique:"Boutique",nQuotidien:"Quotidien",nApropos:"À propos",nContact:"Contact",
+  heroEye:"Art · Désir · Vie",heroTitle:"Le corps,<br>l'art & <em>le quotidien</em>",heroText:"Bienvenue dans mon univers : des œuvres que je crée, du contenu sensuel que j'assume, et des fragments de ma vie de tous les jours.",heroBtn1:"Voir mes œuvres",heroBtn2:"Contenu sensuel",
+  galEye:"Galerie",galSub:"Peintures, dessins, photographies — choisissez une série pour en ouvrir la page.",all:"Toutes",
+  senSub:"Les aperçus sont floutés : cliquez pour révéler. Le contenu complet est sur mes plateformes.",
+  shopEye:"À vendre",shopSub:"Impressions, originaux et produits numériques.",shopNote:"Paiement sécurisé via un lien externe (Stripe, PayPal…). Prix en dollars canadiens, taxes en sus.",buy:"Acheter",soldout:"Épuisé",
+  jrnEye:"Journal",jrnSub:"Café, atelier, coulisses, pensées en vrac.",
+  aboutTitle:"Bonjour, moi c'est …",aboutP1:"Écrivez ici quelques lignes sur vous : qui vous êtes, ce qui vous inspire, ce que les visiteurs trouvent ici et à quelle fréquence vous publiez.",aboutP2:"Vous pouvez aussi préciser vos limites : consentement, respect, et ce que vous ne partagez pas.",
+  cEye:"Écrivez-moi",cSub:"Collaborations, commandes d'œuvres, questions — je réponds avec plaisir.",cName:"Votre nom",cMail:"Votre courriel",cMsg:"Votre message",cSend:"Envoyer",
+  foot:"Contenu réservé aux adultes (18+). Toutes les personnes représentées sont majeures et consentantes.",
+  back:"← Retour",serieEye:"Série",placeholder:"Votre image",open:"Ouvrir",lock:"Cliquer pour voir",subject:"Message depuis le site"},
+ en:{gateTitle:"Adults only",gateText:"This site contains artistic and sensual content intended for adults (18+). By entering, you confirm that you are of legal age in your region and consent to viewing this type of content.",gateEnter:"I am 18 or older — Enter",gateExit:"Leave",
+  nOeuvres:"Artwork",nSensuel:"Sensual",nBoutique:"Shop",nQuotidien:"Daily life",nApropos:"About",nContact:"Contact",
+  heroEye:"Art · Desire · Life",heroTitle:"The body,<br>art & <em>everyday life</em>",heroText:"Welcome to my world: the artwork I create, the sensual content I proudly share, and fragments of my daily life.",heroBtn1:"See my artwork",heroBtn2:"Sensual content",
+  galEye:"Gallery",galSub:"Paintings, drawings, photography — pick a series to open its page.",all:"All",
+  senSub:"Previews are blurred: click to reveal. Full content is on my platforms.",
+  shopEye:"For sale",shopSub:"Prints, originals and digital goods.",shopNote:"Secure payment through an external link (Stripe, PayPal…). Prices in Canadian dollars, taxes extra.",buy:"Buy",soldout:"Sold out",
+  jrnEye:"Journal",jrnSub:"Coffee, studio, behind the scenes, loose thoughts.",
+  aboutTitle:"Hi, I'm …",aboutP1:"Write a few lines about yourself here: who you are, what inspires you, what visitors will find and how often you post.",aboutP2:"You can also state your boundaries: consent, respect, and what you don't share.",
+  cEye:"Get in touch",cSub:"Collaborations, commissions, questions — I'm happy to reply.",cName:"Your name",cMail:"Your email",cMsg:"Your message",cSend:"Send",
+  foot:"Adult-only content (18+). All people depicted are adults and consenting.",
+  back:"← Back",serieEye:"Series",placeholder:"Your image",open:"Open",lock:"Click to view",subject:"Message from the website"}
+};
+
+/* ============================ Code ============================ */
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+let lang = 'fr', filter = 'all';
+try{ lang = localStorage.getItem('lang') || (navigator.language||'fr').slice(0,2)==='en' ? 'en':'fr'; if(localStorage.getItem('lang')) lang=localStorage.getItem('lang'); }catch(e){}
+const t = k => T[lang][k];
+const L = o => (o && typeof o==='object') ? o[lang] : o;
+const hues = [345,15,30,320,0,355,10,335];
+const bg = i => `linear-gradient(135deg,hsl(${hues[i%8]} 40% 22%),hsl(${(hues[i%8]+40)%360} 35% 10%))`;
+const media = (img,i,alt) => img ? `<img src="${img}" alt="${alt||''}" loading="lazy">` : `<div class="ph" style="background:${bg(i)}">${t('placeholder')}</div>`;
+
+function tile(item,i,mature,extra=''){
+  const d = document.createElement('div');
+  d.className = 'tile'+(mature?' mature':'')+extra;
+  d.innerHTML = media(item.img||item.cover,i,L(item.titre))
+    + (mature?`<div class="lock"><b>🔒</b>${t('lock')}</div>`:'')
+    + `<div class="cap">${L(item.titre)}<small>${L(item.detail)||''}</small></div>`;
+  d.onclick = () => { if(mature && !d.classList.contains('revealed')){d.classList.add('revealed');return;} openLB(item,i); };
+  return d;
+}
+
+function render(){
+  document.documentElement.lang = lang;
+  $$('[data-i]').forEach(e=>e.textContent=t(e.dataset.i));
+  $$('[data-i-html]').forEach(e=>e.innerHTML=t(e.dataset.iHtml));
+  $$('[data-iph]').forEach(e=>e.placeholder=t(e.dataset.iph));
+  $('#langBtn').textContent = lang==='fr'?'EN':'FR';
+  $('#back').textContent = t('back');
+
+  // Séries : filtres + cartes
+  $('#seriesChips').innerHTML = '';
+  const allChip = chip(t('all'),'all'); $('#seriesChips').append(allChip);
+  CONFIG.series.forEach(s=>$('#seriesChips').append(chip(L(s.titre),s.id)));
+  const g = $('#gridSeries'); g.innerHTML='';
+  if(filter==='all'){
+    CONFIG.series.forEach((s,i)=>{
+      const n = CONFIG.oeuvres.filter(o=>o.serie===s.id).length;
+      const d = tile({titre:s.titre,detail:{fr:n+' œuvres',en:n+' works'},cover:s.cover||(CONFIG.oeuvres.find(o=>o.serie===s.id)||{}).img},i,false);
+      d.onclick = () => openSerie(s.id); g.append(d);
+    });
+  } else {
+    CONFIG.oeuvres.filter(o=>o.serie===filter).forEach((o,i)=>g.append(tile(o,i,false)));
+  }
+
+  $('#gridSens').innerHTML=''; CONFIG.sensuel.forEach((o,i)=>$('#gridSens').append(tile(o,i+2,true)));
+  $('#platforms').innerHTML = CONFIG.plateformes.map(p=>`<a href="${p.url}" target="_blank" rel="noopener">${p.nom} →</a>`).join('');
+
+  $('#shop').innerHTML = CONFIG.boutique.map((p,i)=>`
+    <div class="prod ${p.dispo?'':'sold'}"><div class="pic">${media(p.img,i+3,L(p.nom))}</div>
+      <div class="body"><h3>${L(p.nom)}</h3><p>${L(p.desc)}</p>
+        <div class="row"><span class="price">${p.prix} $</span>
+        ${p.dispo?`<a class="btn solid" style="padding:.6rem 1.2rem" href="${p.lien}" target="_blank" rel="noopener">${t('buy')}</a>`:`<span class="btn ghost" style="padding:.6rem 1.2rem">${t('soldout')}</span>`}</div></div></div>`).join('');
+
+  $('#journal').innerHTML = CONFIG.journal.map(e=>`<article class="entry"><time>${L(e.date)}</time><div><h3>${L(e.titre)}</h3><p>${L(e.texte)}</p></div></article>`).join('');
+  $('#portrait').innerHTML = CONFIG.portrait ? `<img src="${CONFIG.portrait}" alt="">` : `<div class="ph" style="height:100%;background:${bg(0)}">Portrait</div>`;
+  if(!$('#seriePage').hidden) openSerie(currentSerie);
+}
+function chip(label,id){const b=document.createElement('button');b.className='chip'+(filter===id?' on':'');b.textContent=label;b.onclick=()=>{filter=id;render()};return b}
+
+let currentSerie=null;
+function openSerie(id){
+  currentSerie=id; const s=CONFIG.series.find(x=>x.id===id);
+  $('#sTitle').textContent=L(s.titre); $('#sDesc').textContent=L(s.desc);
+  const g=$('#sGrid'); g.innerHTML=''; CONFIG.oeuvres.filter(o=>o.serie===id).forEach((o,i)=>g.append(tile(o,i,false)));
+  $('#seriePage').hidden=false; document.body.style.overflow='hidden'; $('#seriePage').scrollTop=0;
+}
+$('#back').onclick=()=>{$('#seriePage').hidden=true;document.body.style.overflow='';currentSerie=null};
+
+function openLB(item,i){
+  $('#lbBox').innerHTML = (item.img?`<img src="${item.img}" alt="">`:`<div class="big" style="background:${bg(i)}">${t('placeholder')}</div>`)+`<p>${L(item.titre)}</p>`;
+  $('#lb').classList.add('open');
+}
+$('#lb').onclick=()=>$('#lb').classList.remove('open');
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('#lb').classList.remove('open');if(!$('#seriePage').hidden)$('#back').click()}});
+
+/* Langue */
+function setLang(l){lang=l;try{localStorage.setItem('lang',l)}catch(e){};render()}
+$('#langBtn').onclick=()=>setLang(lang==='fr'?'en':'fr');
+$$('[data-lang]').forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
+
+/* Thème */
+function setTheme(th){document.documentElement.dataset.theme=th;$('#themeBtn').textContent=th==='light'?'☀':'☾';try{localStorage.setItem('theme',th)}catch(e){}}
+let th='dark'; try{th=localStorage.getItem('theme')||'dark'}catch(e){}
+setTheme(th);
+$('#themeBtn').onclick=()=>setTheme(document.documentElement.dataset.theme==='light'?'dark':'light');
+
+/* Menu mobile */
+$('#burger').onclick=()=>$('#mnav').classList.toggle('open');
+$$('#mnav a').forEach(a=>a.onclick=()=>$('#mnav').classList.remove('open'));
+
+/* Vérification d'âge */
+try{ if(localStorage.getItem('age18')==='1') $('#gate').classList.add('hidden'); }catch(e){}
+$('#enter').onclick=()=>{$('#gate').classList.add('hidden');try{localStorage.setItem('age18','1')}catch(e){}};
+
+/* Formulaire → courriel */
+$('#cf').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);
+  location.href=`mailto:${CONFIG.email}?subject=${encodeURIComponent(t('subject'))}&body=${encodeURIComponent(f.get('msg')+'\n\n— '+f.get('nom')+' ('+f.get('courriel')+')')}`};
+
+$('#yr').textContent=new Date().getFullYear();
+render();
+</script>
+</body>
+</html>
