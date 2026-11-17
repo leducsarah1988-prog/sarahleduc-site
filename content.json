@@ -1,0 +1,279 @@
+{
+  "email": "contact@sarahleduc.art",
+  "plateformes": [
+    {
+      "nom": "OnlyFans / Fansly",
+      "url": "#"
+    },
+    {
+      "nom": "Instagram",
+      "url": "#"
+    },
+    {
+      "nom": "Patreon",
+      "url": "#"
+    }
+  ],
+  "series": [
+    {
+      "id": "toiles",
+      "titre": {
+        "fr": "Toiles",
+        "en": "Paintings"
+      },
+      "desc": {
+        "fr": "Peintures à l'huile et acrylique, formats moyens et grands.",
+        "en": "Oil and acrylic paintings, medium and large formats."
+      },
+      "cover": ""
+    },
+    {
+      "id": "traits",
+      "titre": {
+        "fr": "Traits",
+        "en": "Drawings"
+      },
+      "desc": {
+        "fr": "Dessins, fusain et encre : le geste avant tout.",
+        "en": "Drawings, charcoal and ink: gesture first."
+      },
+      "cover": ""
+    },
+    {
+      "id": "lumiere",
+      "titre": {
+        "fr": "Lumière",
+        "en": "Light"
+      },
+      "desc": {
+        "fr": "Photographie : corps, ombres et clair-obscur.",
+        "en": "Photography: bodies, shadows and chiaroscuro."
+      },
+      "cover": ""
+    }
+  ],
+  "oeuvres": [
+    {
+      "serie": "toiles",
+      "titre": {
+        "fr": "Sans titre I",
+        "en": "Untitled I"
+      },
+      "detail": {
+        "fr": "Huile sur toile · 2026",
+        "en": "Oil on canvas · 2026"
+      },
+      "img": ""
+    },
+    {
+      "serie": "toiles",
+      "titre": {
+        "fr": "Rouge",
+        "en": "Red"
+      },
+      "detail": {
+        "fr": "Acrylique · 2025",
+        "en": "Acrylic · 2025"
+      },
+      "img": ""
+    },
+    {
+      "serie": "traits",
+      "titre": {
+        "fr": "Nuit d'encre",
+        "en": "Ink Night"
+      },
+      "detail": {
+        "fr": "Dessin · 2026",
+        "en": "Drawing · 2026"
+      },
+      "img": ""
+    },
+    {
+      "serie": "traits",
+      "titre": {
+        "fr": "Silhouette",
+        "en": "Silhouette"
+      },
+      "detail": {
+        "fr": "Fusain · 2025",
+        "en": "Charcoal · 2025"
+      },
+      "img": ""
+    },
+    {
+      "serie": "lumiere",
+      "titre": {
+        "fr": "Courbes",
+        "en": "Curves"
+      },
+      "detail": {
+        "fr": "Photographie · 2025",
+        "en": "Photograph · 2025"
+      },
+      "img": ""
+    },
+    {
+      "serie": "lumiere",
+      "titre": {
+        "fr": "Étude de lumière",
+        "en": "Light Study"
+      },
+      "detail": {
+        "fr": "Photographie · 2024",
+        "en": "Photograph · 2024"
+      },
+      "img": ""
+    }
+  ],
+  "sensuel": [
+    {
+      "titre": {
+        "fr": "Boudoir — Série 1",
+        "en": "Boudoir — Series 1"
+      },
+      "detail": {
+        "fr": "12 photos",
+        "en": "12 photos"
+      },
+      "img": ""
+    },
+    {
+      "titre": {
+        "fr": "Clair-obscur",
+        "en": "Chiaroscuro"
+      },
+      "detail": {
+        "fr": "8 photos",
+        "en": "8 photos"
+      },
+      "img": ""
+    },
+    {
+      "titre": {
+        "fr": "Soie & lumière",
+        "en": "Silk & Light"
+      },
+      "detail": {
+        "fr": "Vidéo",
+        "en": "Video"
+      },
+      "img": ""
+    },
+    {
+      "titre": {
+        "fr": "Matin doux",
+        "en": "Soft Morning"
+      },
+      "detail": {
+        "fr": "10 photos",
+        "en": "10 photos"
+      },
+      "img": ""
+    }
+  ],
+  "boutique": [
+    {
+      "nom": {
+        "fr": "Impression « Rouge » 40×50",
+        "en": "“Red” print 40×50"
+      },
+      "desc": {
+        "fr": "Tirage d'art signé et numéroté.",
+        "en": "Signed, numbered fine-art print."
+      },
+      "prix": 60,
+      "lien": "#",
+      "dispo": true,
+      "img": ""
+    },
+    {
+      "nom": {
+        "fr": "Toile originale « Sans titre I »",
+        "en": "Original “Untitled I”"
+      },
+      "desc": {
+        "fr": "Pièce unique, huile sur toile 60×80.",
+        "en": "One of a kind, oil on canvas 60×80."
+      },
+      "prix": 850,
+      "lien": "#",
+      "dispo": true,
+      "img": ""
+    },
+    {
+      "nom": {
+        "fr": "Carnet de croquis imprimé",
+        "en": "Printed sketchbook"
+      },
+      "desc": {
+        "fr": "48 pages, couverture rigide.",
+        "en": "48 pages, hardcover."
+      },
+      "prix": 35,
+      "lien": "#",
+      "dispo": true,
+      "img": ""
+    },
+    {
+      "nom": {
+        "fr": "Série boudoir (PDF)",
+        "en": "Boudoir series (PDF)"
+      },
+      "desc": {
+        "fr": "Téléchargement numérique, 18+.",
+        "en": "Digital download, 18+."
+      },
+      "prix": 15,
+      "lien": "#",
+      "dispo": false,
+      "img": ""
+    }
+  ],
+  "journal": [
+    {
+      "date": {
+        "fr": "12 nov. 2026",
+        "en": "Nov 12, 2026"
+      },
+      "titre": {
+        "fr": "Journée d'atelier",
+        "en": "Studio day"
+      },
+      "texte": {
+        "fr": "Longue session de peinture, café froid et playlist en boucle. Une nouvelle toile prend forme.",
+        "en": "Long painting session, cold coffee and a playlist on repeat. A new canvas is taking shape."
+      }
+    },
+    {
+      "date": {
+        "fr": "08 nov. 2026",
+        "en": "Nov 8, 2026"
+      },
+      "titre": {
+        "fr": "Coulisses d'un shooting",
+        "en": "Behind the shoot"
+      },
+      "texte": {
+        "fr": "Préparation, lumière, essais… un aperçu de ce qui se passe avant le déclic.",
+        "en": "Prep, lighting, test shots… a peek at what happens before the click."
+      }
+    },
+    {
+      "date": {
+        "fr": "01 nov. 2026",
+        "en": "Nov 1, 2026"
+      },
+      "titre": {
+        "fr": "Petites choses",
+        "en": "Little things"
+      },
+      "texte": {
+        "fr": "Marche en ville, marché du coin, quelques idées griffonnées dans le carnet.",
+        "en": "A walk downtown, the corner market, a few ideas scribbled in the notebook."
+      }
+    }
+  ],
+  "portrait": "",
+  "devise": "CAD"
+}
