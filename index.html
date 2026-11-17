@@ -436,7 +436,8 @@ $('#cf').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);
   location.href=`mailto:${CONFIG.email}?subject=${encodeURIComponent(t('subject'))}&body=${encodeURIComponent(f.get('msg')+'\n\n— '+f.get('nom')+' ('+f.get('courriel')+')')}`};
 
 $('#yr').textContent=new Date().getFullYear();
-render();
+/* Le contenu éditable vit dans content.json (géré depuis /admin.html) */
+fetch('content.json?'+Date.now()).then(r=>r.ok?r.json():null).then(d=>{if(d)Object.assign(CONFIG,d)}).catch(()=>{}).finally(render);
 </script>
 </body>
 </html>
