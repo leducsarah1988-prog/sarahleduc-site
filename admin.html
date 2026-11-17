@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Mon espace — sarahleduc.art</title>
+<style>
+  :root{--bg:#0e0b0c;--card:#1d1618;--ink:#f3ece8;--muted:#a8999a;--accent:#c9566b;--gold:#e0a96d;--line:rgba(255,255,255,.12)}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+  header{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.2rem;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
+  header h1{font-size:1.1rem;margin:0;font-weight:600}
+  header a{color:var(--gold);font-size:.85rem}
+  main{max-width:880px;margin:auto;padding:1.2rem}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1.2rem;margin-bottom:1.2rem}
+  h2{margin:.2rem 0 .8rem;font-size:1.15rem}
+  label{display:block;font-size:.8rem;color:var(--muted);margin:.7rem 0 .2rem}
+  input,select,textarea{width:100%;padding:.65rem .8rem;border-radius:8px;border:1px solid var(--line);background:#120d0f;color:var(--ink);font:inherit}
+  textarea{min-height:90px}
+  input[type=checkbox]{width:auto}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+  @media(max-width:600px){.row{grid-template-columns:1fr}}
+  button{cursor:pointer;border:1px solid var(--accent);background:transparent;color:var(--ink);padding:.6rem 1.1rem;border-radius:8px;font:inherit}
+  button.solid{background:var(--accent);color:#fff}
+  button.small{padding:.3rem .7rem;font-size:.82rem}
+  button.danger{border-color:#8a2a3a;color:#f0a0ad}
+  button:disabled{opacity:.5;cursor:wait}
+  .tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem}
+  .tabs button.on{background:var(--accent);color:#fff}
+  .item{display:flex;gap:.8rem;align-items:center;padding:.6rem 0;border-top:1px solid var(--line)}
+  .item img,.item .ph{width:56px;height:56px;object-fit:cover;border-radius:6px;background:#2a1f22;flex:none}
+  .item .t{flex:1;min-width:0}
+  .item .t b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .item .t span{color:var(--muted);font-size:.82rem}
+  .acts{display:flex;gap:.3rem;flex-wrap:wrap}
+  .msg{padding:.7rem 1rem;border-radius:8px;margin:.8rem 0;font-size:.9rem}
+  .ok{background:#16301f;border:1px solid #2c6a43}
+  .err{background:#3a1620;border:1px solid #8a2a3a}
+  .info{background:#2a2113;border:1px solid #6e5420}
+  .bar{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding:.8rem 1.2rem;display:flex;gap:.8rem;align-items:center;justify-content:space-between}
+  .prev{max-width:140px;max-height:140px;border-radius:8px;margin-top:.5rem;display:block}
+  ol{padding-left:1.2rem;margin:.4rem 0}
+  small{color:var(--muted)}
+  code{background:#120d0f;padding:.1rem .35rem;border-radius:4px}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header><h1>🎨 Mon espace — sarahleduc.art</h1><a href="./" target="_blank">Voir le site ↗</a></header>
+<main>
+
+<!-- Connexion -->
+<section id="login" class="card">
+  <h2>Connexion</h2>
+  <p>Cet espace modifie ton site directement. Pour t'y connecter, il faut une « clé » GitHub (à créer une seule fois, 2 minutes) :</p>
+  <ol>
+    <li>Ouvre <a style="color:var(--gold)" href="https://github.com/settings/personal-access-tokens/new" target="_blank">GitHub → Nouvelle clé d'accès</a>.</li>
+    <li>Nom : <code>espace-contenu</code>. Expiration : 1 an.</li>
+    <li>« Repository access » : <b>Only select repositories</b> → <code>sarahleduc-site</code>.</li>
+    <li>« Permissions » → <b>Contents</b> : <b>Read and write</b>.</li>
+    <li>Clique « Generate token », copie la clé, colle-la ci-dessous.</li>
+  </ol>
+  <label for="tok">Ta clé GitHub</label>
+  <input id="tok" type="password" placeholder="github_pat_…" autocomplete="off">
+  <p><small>La clé reste seulement dans ce navigateur. Ne la partage avec personne.</small></p>
+  <button class="solid" id="go">Se connecter</button>
+  <div id="loginMsg"></div>
+</section>
+
+<!-- Application -->
+<section id="app" hidden>
+  <div class="tabs" id="tabs"></div>
+  <div id="panel"></div>
+</section>
+</main>
+
+<div class="bar" id="bar" hidden>
+  <span id="status"><small>Aucun changement.</small></span>
+  <span><button id="logout" class="small">Déconnexion</button> <button class="solid" id="publish" disabled>Publier sur le site</button></span>
+</div>
+
+<script>
+const REPO='leducsarah1988-prog/sarahleduc-site', BRANCH='main', API='https://api.github.com/repos/'+REPO+'/contents/';
+const $=s=>document.querySelector(s);
+let token='', data=null, sha=null, pending={}, dirty=false, tab='oeuvres', editing=null;
+
+/* ------- Définition des sections et champs ------- */
+const SECTIONS={
+  oeuvres:{label:'Œuvres',list:'oeuvres',title:o=>L(o.titre),sub:o=>o.serie+' · '+L(o.detail),
+    fields:[{k:'serie',t:'serie',l:'Série'},{k:'titre',t:'i18n',l:'Titre'},{k:'detail',t:'i18n',l:'Détail (ex. Huile sur toile · 2026)'},{k:'img',t:'img',l:'Image'}]},
+  sensuel:{label:'Sensuel',list:'sensuel',title:o=>L(o.titre),sub:o=>L(o.detail),
+    fields:[{k:'titre',t:'i18n',l:'Titre'},{k:'detail',t:'i18n',l:'Détail (ex. 12 photos)'},{k:'img',t:'img',l:'Image'}]},
+  boutique:{label:'Boutique',list:'boutique',title:o=>L(o.nom),sub:o=>o.prix+' $ · '+(o.dispo?'disponible':'épuisé'),
+    fields:[{k:'nom',t:'i18n',l:'Nom du produit'},{k:'desc',t:'i18n',l:'Description'},{k:'prix',t:'num',l:'Prix ($ CAD)'},{k:'lien',t:'text',l:'Lien de paiement (Stripe, PayPal…)'},{k:'dispo',t:'bool',l:'Disponible'},{k:'img',t:'img',l:'Image'}]},
+  journal:{label:'Journal',list:'journal',title:o=>L(o.titre),sub:o=>L(o.date),
+    fields:[{k:'date',t:'date',l:'Date'},{k:'titre',t:'i18n',l:'Titre'},{k:'texte',t:'i18nArea',l:'Texte'}]},
+  series:{label:'Séries',list:'series',title:o=>L(o.titre),sub:o=>o.id,
+    fields:[{k:'id',t:'slug',l:'Identifiant court (sans espace, ex. aquarelles)'},{k:'titre',t:'i18n',l:'Nom de la série'},{k:'desc',t:'i18nArea',l:'Description'},{k:'cover',t:'img',l:'Image de couverture (facultatif)'}]},
+  profil:{label:'Profil & liens',single:true}
+};
+const L=o=>o&&typeof o==='object'?(o.fr||o.en||''):(o||'');
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ------- Utilitaires GitHub ------- */
+const b64text=s=>btoa(unescape(encodeURIComponent(s)));
+const unb64text=b=>decodeURIComponent(escape(atob(b.replace(/\n/g,''))));
+async function gh(path,opt={}){
+  const r=await fetch(API+path,{...opt,headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json',...(opt.headers||{})}});
+  if(!r.ok){let m='';try{m=(await r.json()).message}catch(e){} throw new Error(r.status+' '+m)}
+  return r.json();
+}
+async function load(){
+  const j=await gh('content.json?ref='+BRANCH+'&t='+Date.now());
+  sha=j.sha; data=JSON.parse(unb64text(j.content));
+  ['series','oeuvres','sensuel','boutique','journal','plateformes'].forEach(k=>data[k]=data[k]||[]);
+}
+
+/* ------- Connexion ------- */
+function msg(el,cls,t){el.innerHTML='<div class="msg '+cls+'">'+t+'</div>'}
+async function login(t){
+  token=t.trim(); const m=$('#loginMsg'); msg(m,'info','Connexion…');
+  try{ await load(); try{localStorage.setItem('gh_tok',token)}catch(e){}
+    $('#login').hidden=true; $('#app').hidden=false; $('#bar').hidden=false; draw();
+  }catch(e){ msg(m,'err','Connexion impossible : '+esc(e.message)+'. Vérifie la clé et ses permissions (Contents : Read and write sur sarahleduc-site).') }
+}
+$('#go').onclick=()=>login($('#tok').value);
+$('#logout').onclick=()=>{ if(dirty&&!confirm('Des changements ne sont pas publiés. Quitter quand même ?'))return; try{localStorage.removeItem('gh_tok')}catch(e){} location.reload() };
+try{const t=localStorage.getItem('gh_tok'); if(t){$('#tok').value=t; login(t)}}catch(e){}
+window.onbeforeunload=e=>{if(dirty){e.preventDefault();e.returnValue=''}};
+
+/* ------- Interface ------- */
+function setDirty(){dirty=true;$('#publish').disabled=false;$('#status').innerHTML='<small>Changements non publiés.</small>'}
+function draw(){
+  $('#tabs').innerHTML=Object.entries(SECTIONS).map(([k,s])=>`<button class="${k===tab?'on':''}" data-t="${k}">${s.label}</button>`).join('');
+  $('#tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;editing=null;draw()});
+  tab==='profil'?drawProfil():drawList();
+}
+function drawList(){
+  const S=SECTIONS[tab], arr=data[S.list];
+  let h=`<div class="card"><h2>${S.label} <small>(${arr.length})</small></h2>`;
+  if(editing===null) h+=`<button class="solid" id="add">+ Ajouter</button>`;
+  h+='</div>';
+  if(editing!==null) h+=formHtml(S, editing==='new'?{}:arr[editing]);
+  else h+='<div class="card">'+(arr.length?arr.map((o,i)=>{
+    const im=o.img||o.cover; const src=pending[im]?pending[im].url:(im||'');
+    return `<div class="item">${src?`<img src="${esc(src)}" alt="">`:'<div class="ph"></div>'}
+      <div class="t"><b>${esc(S.title(o))}</b><span>${esc(S.sub(o))}</span></div>
+      <div class="acts"><button class="small" data-a="up" data-i="${i}">↑</button><button class="small" data-a="dn" data-i="${i}">↓</button>
+      <button class="small" data-a="ed" data-i="${i}">Modifier</button><button class="small danger" data-a="del" data-i="${i}">Supprimer</button></div></div>`}).join(''):'<small>Rien ici pour l\'instant.</small>')+'</div>';
+  $('#panel').innerHTML=h;
+  const add=$('#add'); if(add)add.onclick=()=>{editing='new';draw()};
+  $('#panel').querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i,a=b.dataset.a;
+    if(a==='ed'){editing=i;draw()}
+    else if(a==='del'){ if(confirm('Supprimer « '+S.title(arr[i])+' » ?')){arr.splice(i,1);setDirty();draw()} }
+    else { const j=a==='up'?i-1:i+1; if(j<0||j>=arr.length)return; [arr[i],arr[j]]=[arr[j],arr[i]]; setDirty(); draw() }
+  });
+  if(editing!==null) bindForm(S);
+}
+function formHtml(S,o){
+  let h=`<div class="card"><h2>${editing==='new'?'Ajouter':'Modifier'} — ${S.label}</h2><form id="f">`;
+  for(const f of S.fields){
+    const v=o[f.k];
+    if(f.t==='i18n'||f.t==='i18nArea'){
+      const tag=f.t==='i18n'?(x,n)=>`<input name="${f.k}_${n}" value="${esc(x)}">`:(x,n)=>`<textarea name="${f.k}_${n}">${esc(x)}</textarea>`;
+      h+=`<div class="row"><div><label>${f.l} — français</label>${tag(v?.fr,'fr')}</div><div><label>${f.l} — English</label>${tag(v?.en,'en')}</div></div>`;
+    } else if(f.t==='serie'){
+      h+=`<label>${f.l}</label><select name="serie">${data.series.map(s=>`<option value="${esc(s.id)}" ${s.id===v?'selected':''}>${esc(L(s.titre))}</option>`).join('')}</select>`;
+    } else if(f.t==='num'){ h+=`<label>${f.l}</label><input name="${f.k}" type="number" min="0" step="0.01" value="${esc(v??'')}">`;
+    } else if(f.t==='bool'){ h+=`<label><input type="checkbox" name="${f.k}" ${(v??true)?'checked':''}> ${f.l}</label>`;
+    } else if(f.t==='date'){ h+=`<label>${f.l}</label><input name="${f.k}" type="date" value="${esc(o._iso||'')}"><small>${v?'Date actuelle : '+esc(L(v))+' (laisse vide pour la garder)':''}</small>`;
+    } else if(f.t==='img'){
+      const cur=v?(pending[v]?pending[v].url:v):'';
+      h+=`<label>${f.l}</label><input type="file" name="${f.k}_file" accept="image/*">${cur?`<img class="prev" src="${esc(cur)}" alt="">`:''}<small>${v?'Image actuelle : '+esc(v)+' (choisis un fichier pour la remplacer)':'Une photo ou un scan (JPG/PNG). Elle sera réduite automatiquement.'}</small>`;
+    } else { h+=`<label>${f.l}</label><input name="${f.k}" value="${esc(v??'')}" ${f.t==='slug'&&editing!=='new'?'readonly':''}>`; }
+  }
+  return h+`<p style="margin-top:1rem"><button type="submit" class="solid">Enregistrer</button> <button type="button" id="cancel">Annuler</button></p><div id="fmsg"></div></form></div>`;
+}
+function bindForm(S){
+  $('#cancel').onclick=()=>{editing=null;draw()};
+  $('#f').onsubmit=async e=>{
+    e.preventDefault(); const fm=new FormData(e.target), arr=data[S.list];
+    const o=editing==='new'?{}:{...arr[editing]};
+    try{
+      for(const f of S.fields){
+        if(f.t==='i18n'||f.t==='i18nArea'){o[f.k]={fr:fm.get(f.k+'_fr').trim(),en:fm.get(f.k+'_en').trim()||fm.get(f.k+'_fr').trim()}; if(!o[f.k].fr)throw new Error('Remplis au moins le champ français de « '+f.l+' ».')}
+        else if(f.t==='serie')o.serie=fm.get('serie');
+        else if(f.t==='num')o[f.k]=Number(fm.get(f.k)||0);
+        else if(f.t==='bool')o[f.k]=fm.get(f.k)==='on';
+        else if(f.t==='date'){const d=fm.get(f.k); if(d){const dt=new Date(d+'T12:00:00'); o[f.k]={fr:dt.toLocaleDateString('fr-CA',{day:'2-digit',month:'short',year:'numeric'}),en:dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}; o._iso=d} else if(!o[f.k])throw new Error('Choisis une date.')}
+        else if(f.t==='img'){const file=fm.get(f.k+'_file'); if(file&&file.size){ o[f.k]=await queueImage(file) } else if(o[f.k]===undefined)o[f.k]=''}
+        else if(f.t==='slug'){const s=fm.get(f.k).trim().toLowerCase().replace(/[^a-z0-9-]/g,'-'); if(!s)throw new Error('Choisis un identifiant.'); if(editing==='new'&&data.series.some(x=>x.id===s))throw new Error('Cet identifiant existe déjà.'); o[f.k]=s}
+        else o[f.k]=fm.get(f.k).trim();
+      }
+      if(S.list==='boutique'&&!o.lien)o.lien='#';
+      delete o._iso;
+      if(editing==='new')arr.unshift(o); else arr[editing]=o;
+      if(S.list==='series'&&editing==='new'&&!o.cover)o.cover='';
+      editing=null; setDirty(); draw();
+    }catch(err){ msg($('#fmsg'),'err',esc(err.message)) }
+  };
+}
+function drawProfil(){
+  const pf=data.plateformes;
+  let h=`<div class="card"><h2>Profil & liens</h2><form id="pf">
+    <label>Courriel de contact (formulaire du site)</label><input name="email" value="${esc(data.email||'')}">
+    <label>Portrait (page « À propos »)</label><input type="file" name="portrait_file" accept="image/*">${data.portrait?`<small>Portrait actuel : ${esc(data.portrait)}</small>`:''}
+    <h2 style="margin-top:1.2rem">Mes plateformes</h2>`;
+  pf.forEach((p,i)=>{h+=`<div class="row"><div><label>Nom</label><input name="pn${i}" value="${esc(p.nom)}"></div><div><label>Lien (https://…)</label><input name="pu${i}" value="${esc(p.url)}"></div></div>`});
+  h+=`<div class="row"><div><label>Ajouter — nom</label><input name="nn"></div><div><label>Ajouter — lien</label><input name="nu" placeholder="https://"></div></div>
+    <p style="margin-top:1rem"><button class="solid" type="submit">Enregistrer</button></p><div id="fmsg"></div></form></div>`;
+  $('#panel').innerHTML=h;
+  $('#pf').onsubmit=async e=>{
+    e.preventDefault(); const fm=new FormData(e.target);
+    try{
+      data.email=fm.get('email').trim();
+      data.plateformes=pf.map((p,i)=>({nom:fm.get('pn'+i).trim(),url:fm.get('pu'+i).trim()||'#'})).filter(p=>p.nom);
+      if(fm.get('nn').trim())data.plateformes.push({nom:fm.get('nn').trim(),url:fm.get('nu').trim()||'#'});
+      const f=fm.get('portrait_file'); if(f&&f.size)data.portrait=await queueImage(f,'portrait');
+      setDirty(); draw(); msg($('#panel').insertAdjacentElement('afterbegin',document.createElement('div')),'ok','Enregistré. Clique sur « Publier sur le site » en bas.');
+    }catch(err){msg($('#fmsg'),'err',esc(err.message))}
+  };
+}
+
+/* ------- Images : réduction + file d'attente ------- */
+function slug(n){return n.toLowerCase().replace(/\.[^.]+$/,'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40)||'image'}
+async function queueImage(file,base){
+  const bmp=await createImageBitmap(file); const max=1800, k=Math.min(1,max/Math.max(bmp.width,bmp.height));
+  const c=document.createElement('canvas'); c.width=Math.round(bmp.width*k); c.height=Math.round(bmp.height*k);
+  c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);
+  const url=c.toDataURL('image/jpeg',.86);
+  const path='images/'+(base||slug(file.name))+'-'+Date.now().toString(36)+'.jpg';
+  pending[path]={b64:url.split(',')[1],url}; return path;
+}
+
+/* ------- Publication ------- */
+$('#publish').onclick=async()=>{
+  const btn=$('#publish'); btn.disabled=true; const st=$('#status');
+  try{
+    const used=new Set(JSON.stringify(data).match(/images\/[^"]+/g)||[]);
+    const paths=Object.keys(pending).filter(p=>used.has(p)); let n=0;
+    for(const p of paths){ st.innerHTML='<small>Envoi des images ('+(++n)+'/'+paths.length+')…</small>';
+      await gh(p,{method:'PUT',body:JSON.stringify({message:'Ajout image '+p,content:pending[p].b64,branch:BRANCH})}); }
+    st.innerHTML='<small>Publication du contenu…</small>';
+    const body={message:'Mise à jour du contenu',content:b64text(JSON.stringify(data,null,2)),sha,branch:BRANCH};
+    const r=await gh('content.json',{method:'PUT',body:JSON.stringify(body)});
+    sha=r.content.sha; pending={}; dirty=false;
+    st.innerHTML='<span style="color:#7ad49a">✔ Publié ! Le site se met à jour dans 1 à 2 minutes.</span>';
+  }catch(e){ st.innerHTML='<span style="color:#f0a0ad">Erreur : '+esc(e.message)+'</span>'; btn.disabled=false }
+};
+</script>
+</body>
+</html>
