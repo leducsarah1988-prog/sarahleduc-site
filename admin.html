@@ -91,8 +91,8 @@ const SECTIONS={
     fields:[{k:'serie',t:'serie',l:'Série'},{k:'titre',t:'i18n',l:'Titre'},{k:'detail',t:'i18n',l:'Détail (ex. Huile sur toile · 2026)'},{k:'img',t:'img',l:'Image'}]},
   sensuel:{label:'Sensuel',list:'sensuel',title:o=>L(o.titre),sub:o=>L(o.detail),
     fields:[{k:'titre',t:'i18n',l:'Titre'},{k:'detail',t:'i18n',l:'Détail (ex. 12 photos)'},{k:'img',t:'img',l:'Image'}]},
-  boutique:{label:'Boutique',list:'boutique',title:o=>L(o.nom),sub:o=>o.prix+' $ · '+(o.dispo?'disponible':'épuisé'),
-    fields:[{k:'nom',t:'i18n',l:'Nom du produit'},{k:'desc',t:'i18n',l:'Description'},{k:'prix',t:'num',l:'Prix ($ CAD)'},{k:'lien',t:'text',l:'Lien de paiement (Stripe, PayPal…)'},{k:'dispo',t:'bool',l:'Disponible'},{k:'img',t:'img',l:'Image'}]},
+  boutique:{label:'Boutique',list:'boutique',title:o=>L(o.nom),sub:o=>o.prix+' $ · '+(o.dispo?(o.limite?o.stock+' en stock':'disponible'):'épuisé'),
+    fields:[{k:'nom',t:'i18n',l:'Nom du produit'},{k:'desc',t:'i18n',l:'Description'},{k:'prix',t:'num',l:'Prix ($ CAD)'},{k:'dispo',t:'bool',l:'Disponible à la vente'},{k:'limite',t:'bool',l:'Quantité limitée (cocher pour gérer le stock)'},{k:'stock',t:'num',l:'Quantité en stock (si limitée)'},{k:'poids',t:'num',l:'Poids en grammes (pour la livraison)'},{k:'numerique',t:'bool',l:'Produit numérique (aucune livraison)'},{k:'img',t:'img',l:'Image'}]},
   journal:{label:'Journal',list:'journal',title:o=>L(o.titre),sub:o=>L(o.date),
     fields:[{k:'date',t:'date',l:'Date'},{k:'titre',t:'i18n',l:'Titre'},{k:'texte',t:'i18nArea',l:'Texte'}]},
   series:{label:'Séries',list:'series',title:o=>L(o.titre),sub:o=>o.id,
@@ -205,6 +205,7 @@ function drawProfil(){
   const pf=data.plateformes;
   let h=`<div class="card"><h2>Profil & liens</h2><form id="pf">
     <label>Courriel de contact (formulaire du site)</label><input name="email" value="${esc(data.email||'')}">
+    <label>Clé publique Snipcart (boutique — voir les instructions de Claude)</label><input name="snip" value="${esc(data.snipcartKey||'')}" placeholder="coller la clé ici">
     <label>Portrait (page « À propos »)</label><input type="file" name="portrait_file" accept="image/*">${data.portrait?`<small>Portrait actuel : ${esc(data.portrait)}</small>`:''}
     <h2 style="margin-top:1.2rem">Mes plateformes</h2>`;
   pf.forEach((p,i)=>{h+=`<div class="row"><div><label>Nom</label><input name="pn${i}" value="${esc(p.nom)}"></div><div><label>Lien (https://…)</label><input name="pu${i}" value="${esc(p.url)}"></div></div>`});
@@ -215,6 +216,7 @@ function drawProfil(){
     e.preventDefault(); const fm=new FormData(e.target);
     try{
       data.email=fm.get('email').trim();
+      data.snipcartKey=fm.get('snip').trim();
       data.plateformes=pf.map((p,i)=>({nom:fm.get('pn'+i).trim(),url:fm.get('pu'+i).trim()||'#'})).filter(p=>p.nom);
       if(fm.get('nn').trim())data.plateformes.push({nom:fm.get('nn').trim(),url:fm.get('nu').trim()||'#'});
       const f=fm.get('portrait_file'); if(f&&f.size)data.portrait=await queueImage(f,'portrait');
@@ -245,7 +247,13 @@ $('#publish').onclick=async()=>{
     st.innerHTML='<small>Publication du contenu…</small>';
     const body={message:'Mise à jour du contenu',content:b64text(JSON.stringify(data,null,2)),sha,branch:BRANCH};
     const r=await gh('content.json',{method:'PUT',body:JSON.stringify(body)});
-    sha=r.content.sha; pending={}; dirty=false;
+    sha=r.content.sha;
+    st.innerHTML='<small>Mise à jour de la boutique…</small>';
+    const sl=x=>(x||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    const sj=JSON.stringify((data.boutique||[]).map(p=>({id:p.id||sl(p.nom.fr),price:p.prix})),null,1);
+    let ssha; try{ssha=(await gh('snipcart.json?ref='+BRANCH+'&t='+Date.now())).sha}catch(e){}
+    await gh('snipcart.json',{method:'PUT',body:JSON.stringify({message:'Catalogue boutique',content:b64text(sj),...(ssha?{sha:ssha}:{}),branch:BRANCH})});
+    pending={}; dirty=false;
     st.innerHTML='<span style="color:#7ad49a">✔ Publié ! Le site se met à jour dans 1 à 2 minutes.</span>';
   }catch(e){ st.innerHTML='<span style="color:#f0a0ad">Erreur : '+esc(e.message)+'</span>'; btn.disabled=false }
 };
