@@ -179,13 +179,35 @@
         "en": "“Red” print 40×50"
       },
       "desc": {
-        "fr": "Tirage d'art signé et numéroté.",
-        "en": "Signed, numbered fine-art print."
+        "fr": "Tirage d'art signé et numéroté, papier coton 310 g. Livré roulé en tube.",
+        "en": "Signed, numbered fine-art print on 310 g cotton paper. Shipped rolled in a tube."
       },
       "prix": 60,
       "lien": "#",
       "dispo": true,
-      "img": ""
+      "img": "",
+      "limite": true,
+      "stock": 20,
+      "poids": 300,
+      "numerique": false
+    },
+    {
+      "nom": {
+        "fr": "Impression « Nu bleu » 30×40",
+        "en": "“Blue nude” print 30×40"
+      },
+      "desc": {
+        "fr": "Tirage d'art signé, papier mat. Édition limitée à 30 exemplaires.",
+        "en": "Signed fine-art print, matte paper. Limited edition of 30."
+      },
+      "prix": 45,
+      "lien": "#",
+      "dispo": true,
+      "img": "",
+      "limite": true,
+      "stock": 30,
+      "poids": 250,
+      "numerique": false
     },
     {
       "nom": {
@@ -193,13 +215,17 @@
         "en": "Original “Untitled I”"
       },
       "desc": {
-        "fr": "Pièce unique, huile sur toile 60×80.",
-        "en": "One of a kind, oil on canvas 60×80."
+        "fr": "Pièce unique, huile sur toile 60×80, prête à accrocher.",
+        "en": "One of a kind, oil on canvas 60×80, ready to hang."
       },
       "prix": 850,
       "lien": "#",
       "dispo": true,
-      "img": ""
+      "img": "",
+      "limite": true,
+      "stock": 1,
+      "poids": 3500,
+      "numerique": false
     },
     {
       "nom": {
@@ -207,13 +233,35 @@
         "en": "Printed sketchbook"
       },
       "desc": {
-        "fr": "48 pages, couverture rigide.",
-        "en": "48 pages, hardcover."
+        "fr": "48 pages de croquis, couverture rigide, imprimé au Québec.",
+        "en": "48 pages of sketches, hardcover, printed in Quebec."
       },
       "prix": 35,
       "lien": "#",
       "dispo": true,
-      "img": ""
+      "img": "",
+      "limite": true,
+      "stock": 50,
+      "poids": 400,
+      "numerique": false
+    },
+    {
+      "nom": {
+        "fr": "Cartes postales (lot de 5)",
+        "en": "Postcards (set of 5)"
+      },
+      "desc": {
+        "fr": "Cinq cartes postales d'art, 10×15 cm, papier épais.",
+        "en": "Five art postcards, 10×15 cm, thick paper."
+      },
+      "prix": 15,
+      "lien": "#",
+      "dispo": true,
+      "img": "",
+      "limite": true,
+      "stock": 100,
+      "poids": 60,
+      "numerique": false
     },
     {
       "nom": {
@@ -221,13 +269,17 @@
         "en": "Boudoir series (PDF)"
       },
       "desc": {
-        "fr": "Téléchargement numérique, 18+.",
-        "en": "Digital download, 18+."
+        "fr": "Téléchargement numérique, 18+. Lien envoyé par courriel après l'achat.",
+        "en": "Digital download, 18+. Link emailed after purchase."
       },
-      "prix": 15,
+      "prix": 25,
       "lien": "#",
-      "dispo": false,
-      "img": ""
+      "dispo": true,
+      "img": "",
+      "limite": false,
+      "stock": 0,
+      "poids": 0,
+      "numerique": true
     }
   ],
   "journal": [
@@ -275,5 +327,6 @@
     }
   ],
   "portrait": "",
-  "devise": "CAD"
+  "devise": "CAD",
+  "snipcartKey": ""
 }
