@@ -116,7 +116,9 @@
   /* Panier */
   #cartBtn{position:relative;background:none;border:1px solid var(--line);color:var(--ink);border-radius:50%;width:2.3rem;height:2.3rem;cursor:pointer;font-size:1rem}
   #cartBtn b{position:absolute;top:-6px;right:-6px;background:var(--accent);color:#fff;border-radius:999px;font-size:.65rem;min-width:1.1rem;height:1.1rem;display:none;align-items:center;justify-content:center;font-family:var(--sans)}
-  #cartBtn b.on{display:flex}
+  #cartBtn b.on,#cartBtn.snip b{display:flex}
+  .stock{display:block;color:var(--accent2);margin:-.5rem 0 .8rem;font-size:.78rem}
+  :root{--snip-accent:var(--accent)}
   #cart{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);z-index:90;background:var(--bg);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column;padding:1.4rem}
   #cart.open{transform:none}
   #cartShade{position:fixed;inset:0;z-index:89;background:rgba(0,0,0,.5);display:none}
@@ -348,7 +350,7 @@ const T = {
   heroEye:"Art · Désir · Vie",heroTitle:"Le corps,<br>l'art & <em>le quotidien</em>",heroText:"Bienvenue dans mon univers : des œuvres que je crée, du contenu sensuel que j'assume, et des fragments de ma vie de tous les jours.",heroBtn1:"Voir mes œuvres",heroBtn2:"Contenu sensuel",
   galEye:"Galerie",galSub:"Peintures, dessins, photographies — choisissez une série pour en ouvrir la page.",all:"Toutes",
   senSub:"Les aperçus sont floutés : cliquez pour révéler. Le contenu complet est sur mes plateformes.",
-  shopEye:"À vendre",shopSub:"Impressions, originaux et produits numériques.",shopNote:"Ajoutez vos articles au panier et envoyez votre commande. Prix en dollars canadiens, taxes en sus.",buy:"Acheter",add:"Ajouter au panier",cartTitle:"Mon panier",cartTotal:"Total",cartOrder:"Envoyer ma commande",cartEmpty:"Votre panier est vide.",cartRemove:"Retirer",cartNote:"Votre commande m'est envoyée par courriel. Je vous réponds rapidement avec les modalités de paiement et de livraison. Taxes et livraison en sus.",cartNeed:"Indiquez votre nom et votre courriel.",cartSubj:"Commande depuis le site",cartHello:"Bonjour, voici ma commande :",cartThanks:"Merci !",soldout:"Épuisé",
+  shopEye:"À vendre",shopSub:"Impressions, originaux et produits numériques.",shopNote:"Paiement sécurisé en ligne. Prix en dollars canadiens ; taxes et livraison calculées au panier.",buy:"Acheter",add:"Ajouter au panier",cartTitle:"Mon panier",cartTotal:"Total",cartOrder:"Envoyer ma commande",cartEmpty:"Votre panier est vide.",cartRemove:"Retirer",cartNote:"Votre commande m'est envoyée par courriel. Je vous réponds rapidement avec les modalités de paiement et de livraison. Taxes et livraison en sus.",cartNeed:"Indiquez votre nom et votre courriel.",cartSubj:"Commande depuis le site",cartHello:"Bonjour, voici ma commande :",cartThanks:"Merci !",left:n=>"Plus que "+n+" en stock",soldout:"Épuisé",
   jrnEye:"Journal",jrnSub:"Café, atelier, coulisses, pensées en vrac.",
   aboutTitle:"Bonjour, moi c'est …",aboutP1:"Écrivez ici quelques lignes sur vous : qui vous êtes, ce qui vous inspire, ce que les visiteurs trouvent ici et à quelle fréquence vous publiez.",aboutP2:"Vous pouvez aussi préciser vos limites : consentement, respect, et ce que vous ne partagez pas.",
   cEye:"Écrivez-moi",cSub:"Collaborations, commandes d'œuvres, questions — je réponds avec plaisir.",cName:"Votre nom",cMail:"Votre courriel",cMsg:"Votre message",cSend:"Envoyer",
@@ -359,7 +361,7 @@ const T = {
   heroEye:"Art · Desire · Life",heroTitle:"The body,<br>art & <em>everyday life</em>",heroText:"Welcome to my world: the artwork I create, the sensual content I proudly share, and fragments of my daily life.",heroBtn1:"See my artwork",heroBtn2:"Sensual content",
   galEye:"Gallery",galSub:"Paintings, drawings, photography — pick a series to open its page.",all:"All",
   senSub:"Previews are blurred: click to reveal. Full content is on my platforms.",
-  shopEye:"For sale",shopSub:"Prints, originals and digital goods.",shopNote:"Add items to your cart and send your order. Prices in Canadian dollars, taxes extra.",buy:"Buy",add:"Add to cart",cartTitle:"My cart",cartTotal:"Total",cartOrder:"Send my order",cartEmpty:"Your cart is empty.",cartRemove:"Remove",cartNote:"Your order is sent to me by email. I'll reply quickly with payment and shipping details. Taxes and shipping extra.",cartNeed:"Please enter your name and email.",cartSubj:"Order from the website",cartHello:"Hello, here is my order:",cartThanks:"Thank you!",soldout:"Sold out",
+  shopEye:"For sale",shopSub:"Prints, originals and digital goods.",shopNote:"Secure online payment. Prices in Canadian dollars; taxes and shipping calculated at checkout.",buy:"Buy",add:"Add to cart",cartTitle:"My cart",cartTotal:"Total",cartOrder:"Send my order",cartEmpty:"Your cart is empty.",cartRemove:"Remove",cartNote:"Your order is sent to me by email. I'll reply quickly with payment and shipping details. Taxes and shipping extra.",cartNeed:"Please enter your name and email.",cartSubj:"Order from the website",cartHello:"Hello, here is my order:",cartThanks:"Thank you!",left:n=>"Only "+n+" left",soldout:"Sold out",
   jrnEye:"Journal",jrnSub:"Coffee, studio, behind the scenes, loose thoughts.",
   aboutTitle:"Hi, I'm …",aboutP1:"Write a few lines about yourself here: who you are, what inspires you, what visitors will find and how often you post.",aboutP2:"You can also state your boundaries: consent, respect, and what you don't share.",
   cEye:"Get in touch",cSub:"Collaborations, commissions, questions — I'm happy to reply.",cName:"Your name",cMail:"Your email",cMsg:"Your message",cSend:"Send",
@@ -413,11 +415,16 @@ function render(){
   $('#gridSens').innerHTML=''; CONFIG.sensuel.forEach((o,i)=>$('#gridSens').append(tile(o,i+2,true)));
   $('#platforms').innerHTML = CONFIG.plateformes.map(p=>`<a href="${p.url}" target="_blank" rel="noopener">${p.nom} →</a>`).join('');
 
-  $('#shop').innerHTML = CONFIG.boutique.map((p,i)=>`
-    <div class="prod ${p.dispo?'':'sold'}"><div class="pic">${media(p.img,i+3,L(p.nom))}</div>
-      <div class="body"><h3>${L(p.nom)}</h3><p>${L(p.desc)}</p>
-        <div class="row"><span class="price">${p.prix} $</span>
-        ${p.dispo?`<button class="btn solid" style="padding:.6rem 1.2rem" data-add="${i}">${t('add')}</button>`:`<span class="btn ghost" style="padding:.6rem 1.2rem">${t('soldout')}</span>`}</div></div></div>`).join('');
+  $('#shop').innerHTML = CONFIG.boutique.map((p,i)=>{
+    const out = !p.dispo || (p.limite && !(Number(p.stock)>0));
+    const left = p.limite && Number(p.stock)>0 && Number(p.stock)<=5 ? `<small class="stock">${t('left')(Number(p.stock))}</small>` : '';
+    let btn;
+    if(out) btn=`<span class="btn ghost" style="padding:.6rem 1.2rem">${t('soldout')}</span>`;
+    else if(SNIP()) btn=`<button class="btn solid snipcart-add-item" style="padding:.6rem 1.2rem" data-item-id="${pid(p)}" data-item-price="${p.prix}" data-item-url="/snipcart.json" data-item-name="${esc(L(p.nom))}" data-item-description="${esc(L(p.desc))}"${p.img?` data-item-image="${location.origin}/${p.img}"`:''}${p.limite?` data-item-max-quantity="${Number(p.stock)}"`:''}${p.poids?` data-item-weight="${Number(p.poids)}"`:''}${p.numerique?' data-item-shippable="false"':''}>${t('add')}</button>`;
+    else btn=`<button class="btn solid" style="padding:.6rem 1.2rem" data-add="${i}">${t('add')}</button>`;
+    return `<div class="prod ${out?'sold':''}"><div class="pic">${media(p.img,i+3,L(p.nom))}</div>
+      <div class="body"><h3>${L(p.nom)}</h3><p>${L(p.desc)}</p>${left}
+        <div class="row"><span class="price">${p.prix} $</span>${btn}</div></div></div>`}).join('');
 
   $('#journal').innerHTML = CONFIG.journal.map(e=>`<article class="entry"><time>${L(e.date)}</time><div><h3>${L(e.titre)}</h3><p>${L(e.texte)}</p></div></article>`).join('');
   $('#portrait').innerHTML = CONFIG.portrait ? `<img src="${CONFIG.portrait}" alt="">` : `<div class="ph" style="height:100%;background:${bg(0)}">Portrait</div>`;
@@ -443,7 +450,7 @@ $('#lb').onclick=()=>$('#lb').classList.remove('open');
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('#lb').classList.remove('open');if(!$('#seriePage').hidden)$('#back').click()}});
 
 /* Langue */
-function setLang(l){lang=l;try{localStorage.setItem('lang',l)}catch(e){};render()}
+function setLang(l){lang=l;try{localStorage.setItem('lang',l)}catch(e){};render();try{Snipcart.api.session.setLanguage(l)}catch(e){}}
 $('#langBtn').onclick=()=>setLang(lang==='fr'?'en':'fr');
 $$('[data-lang]').forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
 
@@ -467,12 +474,27 @@ $('#cf').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);
 
 $('#yr').textContent=new Date().getFullYear();
 
+
+/* ====================== Snipcart (paiement, taxes, livraison, stock) ====================== */
+const SNIP=()=>!!(CONFIG.snipcartKey&&CONFIG.snipcartKey.trim());
+const pid=p=>p.id||(p.nom.fr||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const esc=x=>String(x==null?'':x).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+let snipLoaded=false;
+function loadSnip(){
+  if(!SNIP()||snipLoaded)return; snipLoaded=true;
+  const d=document.createElement('div');d.hidden=true;d.id='snipcart';d.dataset.apiKey=CONFIG.snipcartKey.trim();d.dataset.currency=(CONFIG.devise||'CAD').toLowerCase();d.dataset.configModalStyle='side';d.dataset.configAddProductBehavior='overlay';document.body.append(d);
+  const l=document.createElement('link');l.rel='stylesheet';l.href='https://cdn.snipcart.com/themes/v3.7.3/default/snipcart.css';document.head.append(l);
+  const sc=document.createElement('script');sc.async=true;sc.src='https://cdn.snipcart.com/themes/v3.7.3/default/snipcart.js';document.body.append(sc);
+  document.addEventListener('snipcart.ready',()=>{try{Snipcart.api.session.setLanguage(lang)}catch(e){}});
+}
+
 /* ====================== Panier ====================== */
 let cart=[]; try{cart=JSON.parse(localStorage.getItem('cart')||'[]')}catch(e){}
 const saveCart=()=>{try{localStorage.setItem('cart',JSON.stringify(cart))}catch(e){}};
 const prodOf=n=>CONFIG.boutique.find(p=>p.nom.fr===n&&p.dispo);
 function cartLines(){return cart.map(c=>({p:prodOf(c.n),q:c.q})).filter(x=>x.p)}
 function renderCart(){
+  if(SNIP()){const b=$('#cartBtn');if(!b.classList.contains('snipcart-checkout')){b.classList.add('snipcart-checkout','snip');$('#cartN').innerHTML='<span class="snipcart-items-count">0</span>';}loadSnip();return}
   const ls=cartLines(), n=ls.reduce((a,x)=>a+x.q,0), sum=ls.reduce((a,x)=>a+x.q*x.p.prix,0);
   $('#cartN').textContent=n; $('#cartN').classList.toggle('on',n>0);
   $('#cartItems').innerHTML = ls.length ? ls.map(x=>`<div class="ci"><span>${L(x.p.nom)}</span><span>${x.q*x.p.prix} $</span>
@@ -487,7 +509,7 @@ document.addEventListener('click',e=>{
   const a=e.target.closest('[data-add]'); if(a){addToCart(+a.dataset.add);return}
   const q=e.target.closest('[data-q]'); if(q){const [n,d]=q.dataset.q.split('|');const c=cart.find(x=>x.n===n);if(c){if(d==='x')c.q=0;else c.q+=+d;cart=cart.filter(x=>x.q>0);saveCart();renderCart()}}
 });
-$('#cartBtn').onclick=()=>openCart(true); $('#cartClose').onclick=$('#cartShade').onclick=()=>openCart(false);
+$('#cartBtn').onclick=()=>{if(!SNIP())openCart(true)}; $('#cartClose').onclick=$('#cartShade').onclick=()=>openCart(false);
 $('#cartOrder').onclick=()=>{
   const name=$('#cartName').value.trim(), mail=$('#cartMail').value.trim();
   if(!name||!/.+@.+\..+/.test(mail)){alert(t('cartNeed'));return}
