@@ -112,6 +112,26 @@
   .sold{opacity:.6}
   .note{color:var(--muted);font-size:.8rem;margin-top:1.2rem}
 
+
+  /* Panier */
+  #cartBtn{position:relative;background:none;border:1px solid var(--line);color:var(--ink);border-radius:50%;width:2.3rem;height:2.3rem;cursor:pointer;font-size:1rem}
+  #cartBtn b{position:absolute;top:-6px;right:-6px;background:var(--accent);color:#fff;border-radius:999px;font-size:.65rem;min-width:1.1rem;height:1.1rem;display:none;align-items:center;justify-content:center;font-family:var(--sans)}
+  #cartBtn b.on{display:flex}
+  #cart{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);z-index:90;background:var(--bg);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column;padding:1.4rem}
+  #cart.open{transform:none}
+  #cartShade{position:fixed;inset:0;z-index:89;background:rgba(0,0,0,.5);display:none}
+  #cartShade.on{display:block}
+  #cart h3{font-family:var(--serif);font-weight:500;font-size:1.6rem;display:flex;justify-content:space-between;align-items:center}
+  #cart h3 button{background:none;border:0;color:var(--ink);font-size:1.4rem;cursor:pointer}
+  #cartItems{flex:1;overflow:auto;margin:1rem 0}
+  .ci{display:grid;grid-template-columns:1fr auto;gap:.2rem .8rem;padding:.8rem 0;border-bottom:1px solid var(--line);font-size:.92rem}
+  .ci .q{display:flex;align-items:center;gap:.5rem;grid-column:1/3}
+  .ci .q button{background:none;border:1px solid var(--line);color:var(--ink);width:1.6rem;height:1.6rem;border-radius:50%;cursor:pointer}
+  .ci .q .rm{margin-left:auto;border:0;width:auto;color:var(--muted);text-decoration:underline;font-size:.8rem}
+  #cartFoot{border-top:1px solid var(--line);padding-top:1rem}
+  #cartFoot .tot{display:flex;justify-content:space-between;font-family:var(--serif);font-size:1.4rem;margin-bottom:.8rem}
+  #cartFoot input{width:100%;margin-bottom:.6rem;padding:.7rem;background:var(--bg2);border:1px solid var(--line);color:var(--ink);font-family:var(--sans)}
+
   /* Journal */
   .journal{display:grid;gap:1px;background:var(--line)}
   .entry{background:var(--bg);padding:1.8rem 0;display:grid;grid-template-columns:140px 1fr;gap:2rem}
@@ -167,9 +187,18 @@
   <div class="tools">
     <button id="langBtn" title="Langue / Language">EN</button>
     <button id="themeBtn" title="Thème / Theme">☾</button>
+    <button id="cartBtn" aria-label="Panier">🛒<b id="cartN"></b></button>
     <button id="burger" aria-label="Menu">☰</button>
   </div>
 </header>
+<div id="cartShade"></div>
+<aside id="cart" aria-label="Panier"><h3><span data-i="cartTitle"></span><button id="cartClose" aria-label="Fermer">×</button></h3>
+  <div id="cartItems"></div>
+  <div id="cartFoot"><div class="tot"><span data-i="cartTotal"></span><span id="cartSum"></span></div>
+    <input id="cartName" data-ph="cName" autocomplete="name"><input id="cartMail" type="email" data-ph="cMail" autocomplete="email">
+    <button class="btn solid" id="cartOrder" style="width:100%" data-i="cartOrder"></button>
+    <p class="note" data-i="cartNote"></p></div>
+</aside>
 <div id="mnav">
   <a href="#oeuvres" data-i="nOeuvres"></a><a href="#sensuel" data-i="nSensuel"></a><a href="#boutique" data-i="nBoutique"></a>
   <a href="#quotidien" data-i="nQuotidien"></a><a href="#apropos" data-i="nApropos"></a><a href="#contact" data-i="nContact"></a>
@@ -319,7 +348,7 @@ const T = {
   heroEye:"Art · Désir · Vie",heroTitle:"Le corps,<br>l'art & <em>le quotidien</em>",heroText:"Bienvenue dans mon univers : des œuvres que je crée, du contenu sensuel que j'assume, et des fragments de ma vie de tous les jours.",heroBtn1:"Voir mes œuvres",heroBtn2:"Contenu sensuel",
   galEye:"Galerie",galSub:"Peintures, dessins, photographies — choisissez une série pour en ouvrir la page.",all:"Toutes",
   senSub:"Les aperçus sont floutés : cliquez pour révéler. Le contenu complet est sur mes plateformes.",
-  shopEye:"À vendre",shopSub:"Impressions, originaux et produits numériques.",shopNote:"Paiement sécurisé via un lien externe (Stripe, PayPal…). Prix en dollars canadiens, taxes en sus.",buy:"Acheter",soldout:"Épuisé",
+  shopEye:"À vendre",shopSub:"Impressions, originaux et produits numériques.",shopNote:"Ajoutez vos articles au panier et envoyez votre commande. Prix en dollars canadiens, taxes en sus.",buy:"Acheter",add:"Ajouter au panier",cartTitle:"Mon panier",cartTotal:"Total",cartOrder:"Envoyer ma commande",cartEmpty:"Votre panier est vide.",cartRemove:"Retirer",cartNote:"Votre commande m'est envoyée par courriel. Je vous réponds rapidement avec les modalités de paiement et de livraison. Taxes et livraison en sus.",cartNeed:"Indiquez votre nom et votre courriel.",cartSubj:"Commande depuis le site",cartHello:"Bonjour, voici ma commande :",cartThanks:"Merci !",soldout:"Épuisé",
   jrnEye:"Journal",jrnSub:"Café, atelier, coulisses, pensées en vrac.",
   aboutTitle:"Bonjour, moi c'est …",aboutP1:"Écrivez ici quelques lignes sur vous : qui vous êtes, ce qui vous inspire, ce que les visiteurs trouvent ici et à quelle fréquence vous publiez.",aboutP2:"Vous pouvez aussi préciser vos limites : consentement, respect, et ce que vous ne partagez pas.",
   cEye:"Écrivez-moi",cSub:"Collaborations, commandes d'œuvres, questions — je réponds avec plaisir.",cName:"Votre nom",cMail:"Votre courriel",cMsg:"Votre message",cSend:"Envoyer",
@@ -330,7 +359,7 @@ const T = {
   heroEye:"Art · Desire · Life",heroTitle:"The body,<br>art & <em>everyday life</em>",heroText:"Welcome to my world: the artwork I create, the sensual content I proudly share, and fragments of my daily life.",heroBtn1:"See my artwork",heroBtn2:"Sensual content",
   galEye:"Gallery",galSub:"Paintings, drawings, photography — pick a series to open its page.",all:"All",
   senSub:"Previews are blurred: click to reveal. Full content is on my platforms.",
-  shopEye:"For sale",shopSub:"Prints, originals and digital goods.",shopNote:"Secure payment through an external link (Stripe, PayPal…). Prices in Canadian dollars, taxes extra.",buy:"Buy",soldout:"Sold out",
+  shopEye:"For sale",shopSub:"Prints, originals and digital goods.",shopNote:"Add items to your cart and send your order. Prices in Canadian dollars, taxes extra.",buy:"Buy",add:"Add to cart",cartTitle:"My cart",cartTotal:"Total",cartOrder:"Send my order",cartEmpty:"Your cart is empty.",cartRemove:"Remove",cartNote:"Your order is sent to me by email. I'll reply quickly with payment and shipping details. Taxes and shipping extra.",cartNeed:"Please enter your name and email.",cartSubj:"Order from the website",cartHello:"Hello, here is my order:",cartThanks:"Thank you!",soldout:"Sold out",
   jrnEye:"Journal",jrnSub:"Coffee, studio, behind the scenes, loose thoughts.",
   aboutTitle:"Hi, I'm …",aboutP1:"Write a few lines about yourself here: who you are, what inspires you, what visitors will find and how often you post.",aboutP2:"You can also state your boundaries: consent, respect, and what you don't share.",
   cEye:"Get in touch",cSub:"Collaborations, commissions, questions — I'm happy to reply.",cName:"Your name",cMail:"Your email",cMsg:"Your message",cSend:"Send",
@@ -388,11 +417,12 @@ function render(){
     <div class="prod ${p.dispo?'':'sold'}"><div class="pic">${media(p.img,i+3,L(p.nom))}</div>
       <div class="body"><h3>${L(p.nom)}</h3><p>${L(p.desc)}</p>
         <div class="row"><span class="price">${p.prix} $</span>
-        ${p.dispo?`<a class="btn solid" style="padding:.6rem 1.2rem" href="${p.lien}" target="_blank" rel="noopener">${t('buy')}</a>`:`<span class="btn ghost" style="padding:.6rem 1.2rem">${t('soldout')}</span>`}</div></div></div>`).join('');
+        ${p.dispo?`<button class="btn solid" style="padding:.6rem 1.2rem" data-add="${i}">${t('add')}</button>`:`<span class="btn ghost" style="padding:.6rem 1.2rem">${t('soldout')}</span>`}</div></div></div>`).join('');
 
   $('#journal').innerHTML = CONFIG.journal.map(e=>`<article class="entry"><time>${L(e.date)}</time><div><h3>${L(e.titre)}</h3><p>${L(e.texte)}</p></div></article>`).join('');
   $('#portrait').innerHTML = CONFIG.portrait ? `<img src="${CONFIG.portrait}" alt="">` : `<div class="ph" style="height:100%;background:${bg(0)}">Portrait</div>`;
   if(!$('#seriePage').hidden) openSerie(currentSerie);
+  renderCart();
 }
 function chip(label,id){const b=document.createElement('button');b.className='chip'+(filter===id?' on':'');b.textContent=label;b.onclick=()=>{filter=id;render()};return b}
 
@@ -436,6 +466,35 @@ $('#cf').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);
   location.href=`mailto:${CONFIG.email}?subject=${encodeURIComponent(t('subject'))}&body=${encodeURIComponent(f.get('msg')+'\n\n— '+f.get('nom')+' ('+f.get('courriel')+')')}`};
 
 $('#yr').textContent=new Date().getFullYear();
+
+/* ====================== Panier ====================== */
+let cart=[]; try{cart=JSON.parse(localStorage.getItem('cart')||'[]')}catch(e){}
+const saveCart=()=>{try{localStorage.setItem('cart',JSON.stringify(cart))}catch(e){}};
+const prodOf=n=>CONFIG.boutique.find(p=>p.nom.fr===n&&p.dispo);
+function cartLines(){return cart.map(c=>({p:prodOf(c.n),q:c.q})).filter(x=>x.p)}
+function renderCart(){
+  const ls=cartLines(), n=ls.reduce((a,x)=>a+x.q,0), sum=ls.reduce((a,x)=>a+x.q*x.p.prix,0);
+  $('#cartN').textContent=n; $('#cartN').classList.toggle('on',n>0);
+  $('#cartItems').innerHTML = ls.length ? ls.map(x=>`<div class="ci"><span>${L(x.p.nom)}</span><span>${x.q*x.p.prix} $</span>
+    <div class="q"><button data-q="${x.p.nom.fr}|-1">−</button><span>${x.q}</span><button data-q="${x.p.nom.fr}|1">+</button><button class="rm" data-q="${x.p.nom.fr}|x">${t('cartRemove')}</button></div></div>`).join('') : `<p class="note">${t('cartEmpty')}</p>`;
+  $('#cartSum').textContent=sum+' $ '+(CONFIG.devise||'CAD');
+  $('#cartFoot').style.display=ls.length?'':'none';
+  $('#cartName').placeholder=t('cName'); $('#cartMail').placeholder=t('cMail');
+}
+function openCart(o){$('#cart').classList.toggle('open',o);$('#cartShade').classList.toggle('on',o)}
+function addToCart(i){const p=CONFIG.boutique[i];if(!p)return;const c=cart.find(x=>x.n===p.nom.fr);c?c.q++:cart.push({n:p.nom.fr,q:1});saveCart();renderCart();openCart(true)}
+document.addEventListener('click',e=>{
+  const a=e.target.closest('[data-add]'); if(a){addToCart(+a.dataset.add);return}
+  const q=e.target.closest('[data-q]'); if(q){const [n,d]=q.dataset.q.split('|');const c=cart.find(x=>x.n===n);if(c){if(d==='x')c.q=0;else c.q+=+d;cart=cart.filter(x=>x.q>0);saveCart();renderCart()}}
+});
+$('#cartBtn').onclick=()=>openCart(true); $('#cartClose').onclick=$('#cartShade').onclick=()=>openCart(false);
+$('#cartOrder').onclick=()=>{
+  const name=$('#cartName').value.trim(), mail=$('#cartMail').value.trim();
+  if(!name||!/.+@.+\..+/.test(mail)){alert(t('cartNeed'));return}
+  const ls=cartLines(), sum=ls.reduce((a,x)=>a+x.q*x.p.prix,0);
+  const body=t('cartHello')+'\n\n'+ls.map(x=>`- ${x.q} × ${L(x.p.nom)} — ${x.q*x.p.prix} $`).join('\n')+`\n\nTotal : ${sum} $ ${CONFIG.devise||'CAD'}\n\n${name}\n${mail}\n\n${t('cartThanks')}`;
+  location.href='mailto:'+CONFIG.email+'?subject='+encodeURIComponent(t('cartSubj')+' — '+name)+'&body='+encodeURIComponent(body);
+};
 /* Le contenu éditable vit dans content.json (géré depuis /admin.html) */
 fetch('content.json?'+Date.now()).then(r=>r.ok?r.json():null).then(d=>{if(d)Object.assign(CONFIG,d)}).catch(()=>{}).finally(render);
 </script>
